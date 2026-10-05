@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  static:
+    name: Static validation
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Show Python version
+        run: python3 --version
+      - name: Run unit tests
+        run: python3 -m unittest scripts.tests.test_benchmark scripts.tests.test_plugin
+      - name: Check shell syntax
+        run: bash -n run_benchmark.sh
+      - name: Check Python syntax
+        run: python3 -c 'import ast, pathlib; [ast.parse(p.read_text(encoding="utf-8"), filename=str(p)) for p in pathlib.Path("scripts").rglob("*.py")]'
+
+  benchmark-test:
+    name: Public benchmark test
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Verify prerequisites
+        run: |
+          python3 --version
+          git --version
+          docker --version
+          docker compose version
+          make --version
+          cc --version
+      - name: Run deterministic public benchmark fixture
+        run: ./run_benchmark.sh --test
