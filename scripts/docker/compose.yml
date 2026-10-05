@@ -1,0 +1,19 @@
+name: bitext-search-benchmarks
+
+services:
+  elasticsearch:
+    build:
+      context: ../..
+      dockerfile: scripts/docker/Dockerfile
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: "false"
+      ES_JAVA_OPTS: ${MIRACL_ES_JAVA_OPTS:--Xms1g -Xmx1g}
+    ports:
+      - "${MIRACL_ES_PORT:-9200}:9200"
+    volumes:
+      - type: bind
+        source: ${MIRACL_ES_DATA_DIR:-../../data/elasticsearch}
+        target: /usr/share/elasticsearch/data
+        bind:
+          create_host_path: false

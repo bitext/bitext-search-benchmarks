@@ -1,0 +1,22 @@
+{
+  "elasticsearch_version": "9.5.4",
+  "bm25": {"k1": 1.2, "b": 0.75},
+  "trec_eval": {
+    "repository": "https://github.com/usnistgov/trec_eval.git",
+    "revision": "d4dd9d9ca4b7984fc48788052503cc4d1644c529",
+    "version": "9.0.8"
+  },
+  "miracl": {
+    "corpus_repository": "miracl/miracl-corpus",
+    "corpus_revision": "d921ec7e349ce0d28daf30b2da9da5ee698bef0d",
+    "benchmark_repository": "miracl/miracl",
+    "benchmark_revision": "5be20db9509754dadad47689368639fcec739c00",
+    "expected": {"documents": 32893221, "queries": 799, "qrels": 8350},
+    "test_documents": 500,
+    "test_queries": 50
+  },
+  "plugin": {
+    "name": "bitext-java-english",
+    "analyzer": "bitext_english"
+  }
+}
