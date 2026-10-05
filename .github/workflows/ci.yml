@@ -42,5 +42,11 @@ jobs:
           docker compose version
           make --version
           cc --version
+      - name: Prepare Elasticsearch data directory
+        run: |
+          sudo install -d -o "$(id -u)" -g 0 -m 0775 \
+            "${RUNNER_TEMP}/miracl-elasticsearch"
       - name: Run deterministic public benchmark fixture
+        env:
+          MIRACL_ES_DATA_DIR: ${{ runner.temp }}/miracl-elasticsearch
         run: ./run_benchmark.sh --test
